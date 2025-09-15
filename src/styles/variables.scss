@@ -1,0 +1,21 @@
+$base-dark-purple: #543310; // Changed from purple to brown
+$base-purple: #8c5519; // Changed from purple to brown
+$base-purple-200: #c8a678; // Changed from purple to light brown
+$base-pink: #f5e0c1; // Changed from pink to light cream
+$base-light-purple: #f9f4e1; // Changed from light purple to cream
+
+$base-dark-purple-2: #543310; // Changed from purple to brown
+$base-purple-2: #8c5519; // Changed from purple to brown
+$base-purple-200-2: #c8a678; // Changed from purple to light brown
+$base-pink-2: #f5e0c1; // Changed from pink to light cream
+$base-light-purple-2: #f9f4e1; // Changed from light purple to cream
+
+$base-black: #090909;
+$base-white: #fdfdfd;
+
+// Mixins
+@mixin centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

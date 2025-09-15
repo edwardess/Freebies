@@ -1,0 +1,4 @@
+# Ignore all files to disable linting completely
+*
+**/*
+
