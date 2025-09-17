@@ -1889,11 +1889,27 @@ const updateMuteState = (muted) => {
 const handleMuteToggle = (e) => {
   e.preventDefault();
 
+  // Debug logging for mobile
+  console.log('Mute toggle triggered', {
+    isMuted: isMuted,
+    audioContextState: Howler.ctx ? Howler.ctx.state : 'no context',
+    isMobile: /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  });
+
+  // Initialize audio context on first user interaction (mobile requirement)
+  if (Howler.ctx && Howler.ctx.state === 'suspended') {
+    Howler.ctx.resume();
+  }
+
   isMuted = !isMuted;
   updateMuteState(isMuted);
-  buttonSounds.click.play();
+  
+  // Only play button sound if not muted
+  if (!isMuted) {
+    buttonSounds.click.play();
+  }
 
-  if (!backgroundMusic.playing()) {
+  if (!backgroundMusic.playing() && !isMuted) {
     backgroundMusic.play();
   }
 
@@ -1927,10 +1943,27 @@ const handleMuteToggle = (e) => {
 };
 
 let isMuted = false;
+let muteButtonTouchHappened = false;
+let audioContextInitialized = false;
+
+// Initialize audio context on first user interaction (required for mobile)
+const initializeAudioContext = () => {
+  if (!audioContextInitialized && Howler.ctx && Howler.ctx.state === 'suspended') {
+    Howler.ctx.resume().then(() => {
+      audioContextInitialized = true;
+      console.log('Audio context initialized');
+    });
+  }
+};
+
 muteToggleButton.addEventListener(
   "click",
   (e) => {
-    if (touchHappened) return;
+    if (muteButtonTouchHappened) {
+      muteButtonTouchHappened = false;
+      return;
+    }
+    initializeAudioContext(); // Initialize audio context for desktop
     handleMuteToggle(e);
   },
   { passive: false }
@@ -1939,8 +1972,13 @@ muteToggleButton.addEventListener(
 muteToggleButton.addEventListener(
   "touchend",
   (e) => {
-    touchHappened = true;
+    muteButtonTouchHappened = true;
+    initializeAudioContext(); // Initialize audio context for mobile
     handleMuteToggle(e);
+    // Reset after a short delay to allow click event to be properly blocked
+    setTimeout(() => {
+      muteButtonTouchHappened = false;
+    }, 100);
   },
   { passive: false }
 );

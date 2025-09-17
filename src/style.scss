@@ -22,7 +22,7 @@ $themes: (
     base-purple-200: #7a4b18, // Changed from purple to brown
     base-pink: #8c5519, // Changed from pink to brown
     base-light-purple: #f9f4e1, // Changed from purple to cream
-    header-text: #3a2208, // Changed to darker brown
+    header-text: #f9f4e1, // Changed to light cream for better visibility
     text: #3a2208, // Changed to darker brown
     svgs: #3a2208, // Changed to darker brown
   ),
@@ -601,6 +601,13 @@ ul {
   @include media.media("<=tablet") {
     top: 30px;
     right: 96px;
+    // Ensure proper touch target size for mobile (minimum 44px)
+    min-width: 44px;
+    min-height: 44px;
+    // Add touch-action for better mobile interaction
+    touch-action: manipulation;
+    // Improve tap highlighting
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
   }
 }
 
